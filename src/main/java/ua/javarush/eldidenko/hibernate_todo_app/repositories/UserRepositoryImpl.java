@@ -12,12 +12,6 @@ public class UserRepositoryImpl implements UserRepository{
     public UserRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-    /*@Override
-    public Optional<User> fetchById(Long id) {
-        try(Session session = sessionFactory.openSession()) {
-            return Optional.ofNullable(session.get(User.class, id));
-        }
-    }*/
 
     @Override
     public User fetchById(Long id) {

@@ -4,9 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-//import jakarta.xml.bind.DatatypeConverter;
-//import javax.xml.bind.DatatypeConverter;
-//import jakarta.xml.bind.DatatypeConverter;
 import jakarta.persistence.NoResultException;
 import ua.javarush.eldidenko.hibernate_todo_app.entites.UserToken;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.BadTokenException;
@@ -19,7 +16,6 @@ import ua.javarush.eldidenko.hibernate_todo_app.services.token_entity.Tokens;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -41,7 +37,6 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public Tokens generateAndSaveTokens(Long userId) {
-        //Long userId = user.getId();
         String accessToken = createJWT(userId, ACCESS_TOKEN_EXPIRE_MILLIS);
         String refreshToken = createJWT(userId, REFRESH_TOKEN_EXPIRE_MILLIS);
 

@@ -38,10 +38,7 @@ public class Task {
     @Column(name = "last_login_date")
     private Timestamp lastUpdate;
 
-    /*@Column(name = "user_id")
-    private Long userId;*/
-
-    @JoinColumn(name = "user_id")//, insertable = false, updatable = false)
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 }

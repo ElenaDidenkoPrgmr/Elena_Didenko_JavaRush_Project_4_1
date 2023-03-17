@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ public class PasswordHash {
     @SneakyThrows
     public static String hash(char[] password) {
         CharBuffer charBuffer = CharBuffer.wrap(password);
-        ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+        ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(charBuffer);
         byte[] passwordAsBytes = Arrays.copyOfRange(byteBuffer.array(),
                 byteBuffer.position(), byteBuffer.limit());
 
@@ -23,8 +23,8 @@ public class PasswordHash {
         byte[] bytes = messageDigest.digest(passwordAsBytes);
 
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++) {
-            result.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16)
+        for (byte aByte : bytes) {
+            result.append(Integer.toString((aByte & 0xff) + 0x100, 16)
                     .substring(1));
         }
         return result.toString();

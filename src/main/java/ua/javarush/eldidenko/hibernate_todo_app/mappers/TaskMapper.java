@@ -12,5 +12,4 @@ public interface TaskMapper {
     Task requestToTask(TaskRequest taskRequest);
 
     TaskDTO taskToDTO(Task task);
-
 }

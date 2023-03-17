@@ -22,12 +22,9 @@ public class TaskRepositoryImpl implements TaskRepository{
             Query<Task> query = session.createQuery(hql, Task.class);
             query.setParameter("userId",userId);
             return query.list();
-            /*return session.createQuery("", Task.class)
-                    .setParameter("id", userId)
-                    .list();*/
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return List.of();
+            throw new IllegalArgumentException(e.getMessage());
+            //return List.of();
         }
     }
 

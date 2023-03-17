@@ -14,8 +14,5 @@ public class HibernateSessionProvider implements SessionProvider{
                 .addAnnotatedClass(UserToken.class)
                 .addAnnotatedClass(Task.class)
                 .buildSessionFactory();
-
-
-
     }
 }

@@ -14,7 +14,7 @@ import lombok.*;
 
 public class UserToken {
     @Id
-    @Column(name="user_id")//
+    @Column(name="user_id")
     private Long id;
 
     @Column(name = "access_token")

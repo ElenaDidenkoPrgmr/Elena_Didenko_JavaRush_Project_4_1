@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface TaskRepository {
 
-
     List<Task> fetchTasksByUserId(Long userId);
 
     Task save(Task requestToTask);

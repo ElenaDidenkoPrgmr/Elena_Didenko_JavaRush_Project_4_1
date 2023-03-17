@@ -7,16 +7,10 @@ import ua.javarush.eldidenko.hibernate_todo_app.exceptions.UserUnauthorizedExcep
 import ua.javarush.eldidenko.hibernate_todo_app.request.UserRequest;
 
 public interface UserService {
-    //UserDTO fetchUserDTOById(Long userId);
-
-    //String fetchUserDTOJsonById(Long userId);
 
     UserDTO createUser(UserRequest userRequest) throws UserNameIsTakenException;
 
-
     UserDTO fetchUserById(Long userId);
-
-    //void updateUser(User update);
 
     UserDTO updateUser(UserRequest userRequest, Long id)  throws UserNameIsTakenException;
 
@@ -27,6 +21,4 @@ public interface UserService {
     User fetchByUserName(String username);
 
     Long authenticateUser(String username, char[] password) throws UserUnauthorizedException;
-
-
 }

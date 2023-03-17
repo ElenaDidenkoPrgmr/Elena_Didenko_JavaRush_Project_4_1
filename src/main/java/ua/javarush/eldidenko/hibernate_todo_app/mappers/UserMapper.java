@@ -7,7 +7,6 @@ import ua.javarush.eldidenko.hibernate_todo_app.entites.User;
 import ua.javarush.eldidenko.hibernate_todo_app.request.AuthenticationRequest;
 import ua.javarush.eldidenko.hibernate_todo_app.request.UserRequest;
 
-
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
     UserMapper INCTANCE = Mappers.getMapper(UserMapper.class);
@@ -17,7 +16,6 @@ public interface UserMapper {
     User updateUserFromRequest(@MappingTarget User user, UserRequest userRequest);
 
     UserDTO userToDTO(User user);
-    //Optional<UserDTO> userToDTO(Optional<User> user);
 
     @Mapping(source = "password", target = "password", qualifiedByName = "passwordParser")
     User requestToUser(AuthenticationRequest authenticationRequest);
