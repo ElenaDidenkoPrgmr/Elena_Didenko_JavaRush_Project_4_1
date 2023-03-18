@@ -9,4 +9,10 @@ public interface TaskService {
     List<TaskDTO> fetchTasksByUserId(Long id);
 
     TaskDTO createTask(TaskRequest taskRequest, Long UserId);
+
+    TaskDTO updateTask(TaskRequest taskRequest, Long taskId);
+
+    TaskDTO fetchTasksById(Long taskId);
+
+    void deleteTask(Long taskId);
 }

@@ -44,14 +44,14 @@ public class UserServiceImpl implements UserService {
     }*/
 
     @Override
-    public UserDTO updateUser(UserRequest userRequest, Long id) throws UserNameIsTakenException {
+    public UserDTO updateUser(UserRequest userRequest, Long userId) throws UserNameIsTakenException {
 
-        if (checkNameIsFree(userRequest.getUsername(), id)) {
+        if (!checkNameIsFree(userRequest.getUsername(), userId)) {
             if (userRequest.getPassword()!=null){
                 hashPassword(userRequest);
             }
 
-            User userBefore = userRepository.fetchById(id);
+            User userBefore = userRepository.fetchById(userId);
             User userModified = userMapper.updateUserFromRequest(userBefore, userRequest);
 
             User userAfter = userRepository.updateUser(userModified);

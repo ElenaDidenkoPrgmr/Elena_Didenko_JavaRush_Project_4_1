@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import java.io.IOException;
 import java.net.URI;
 
+import ua.javarush.eldidenko.hibernate_todo_app.exceptions.IllegalArgumentExceptionMapper;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.ServerExceptionMapper;
 import ua.javarush.eldidenko.hibernate_todo_app.provider.HibernateSessionProvider;
 import ua.javarush.eldidenko.hibernate_todo_app.provider.SessionProvider;
@@ -41,7 +42,7 @@ public class Main {
         final ResourceConfig rc = new ResourceConfig()
                 .register(new LoggingFeature(java.util.logging.Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME),
                         java.util.logging.Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 10000))
-                //.register(IllegalArgumentExceptionMapper.class)
+                .register(IllegalArgumentExceptionMapper.class)
                 .register(ServerExceptionMapper.class)
 
                 .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
@@ -49,7 +50,7 @@ public class Main {
                 .property("userService", userService)
                 .property("jwtService", jwtService)
                 .property("taskService", taskService)
-                .packages("ua.javarush.eldidenko.hibernate_todo_app");
+                .packages("ua.javarush.eldidenko.hibernate_todo_app.rest");
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }

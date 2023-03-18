@@ -47,7 +47,7 @@ public class UsersEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(UserRequest userRequest) {
-        if (!isAllowedRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
 
         UserDTO updatedUser;
         try {
@@ -81,18 +81,18 @@ public class UsersEndpoint {
     @DELETE
     @Path("{userId}")
     public Response deleteUser() {
-        if (!isAllowedRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
         userService.deleteUser(userId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    private boolean isAllowedRequest() {
+    private boolean isForbiddenRequest() {
         if (!jwtService.validateAccessToken(token).isValid()) {
-            return false;
+            return true;
         }
         if (userService.fetchUserById(userId) == null) {
             throw new WebApplicationException("user not found: " + userId, Response.Status.NOT_FOUND);
         }
-        return true;
+        return false;
     }
 }

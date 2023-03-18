@@ -23,6 +23,7 @@ public class TasksEndpoint {
     private JwtService jwtService;
     private TaskService taskService;
     @PathParam("userId") Long userId;
+    @PathParam("taskId") Long taskId;
     @QueryParam("token") String token;
 
     @Context
@@ -32,12 +33,10 @@ public class TasksEndpoint {
         taskService = (TaskService) rc.getProperty("taskService");
     }
 
-
     @GET
     @Produces("application/json")
-    public Response getTask() {
+    public Response getAllUsersTask() {
         if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
-
 
         List<TaskDTO> tasks = taskService.fetchTasksByUserId(userId);
         return Response
@@ -46,31 +45,38 @@ public class TasksEndpoint {
                 .build();
     }
 
-  /*  @PUT
-    @Path("{userId}")
+    @GET
+    @Path("{taskId}")
+    @Produces("application/json")
+    public Response getOneTask() {
+        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+
+        TaskDTO task = taskService.fetchTasksById(taskId);
+        return Response
+                .status(Response.Status.OK)
+                .entity(task)
+                .build();
+    }
+
+    @PUT
+    @Path("{taskId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(UserRequest userRequest,
-                               @PathParam("userId") Long id, @QueryParam("token") String token) {
-        if (validateRequest(id, token)) return Response.status(Response.Status.FORBIDDEN).build();
-
-        UserDTO updatedUser;
-        try {
-            updatedUser = userService.updateUser(userRequest, id);
-        } catch (UserNameIsTakenException e) {
-            throw new WebApplicationException("username is taken: " + userRequest.getUsername(), Response.Status.CONFLICT);
-        }
+    public Response updateTask(TaskRequest taskRequest) {
+        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        TaskDTO updatedTask = taskService.updateTask(taskRequest, taskId);
         return Response
-                .created(URI.create("/users/" + id))
-                .entity(updatedUser)
+                .created(URI.create("/users/" + userId + "/tasks/" + updatedTask.getId()))
+                .entity(updatedTask)
                 .build();
-    }*/
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createTask(TaskRequest taskRequest) {
-        if (!isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        if (isForbiddenRequest())
+            return Response.status(Response.Status.FORBIDDEN).build();
 
         TaskDTO taskDTO = taskService.createTask(taskRequest, userId);
         return Response
@@ -79,14 +85,14 @@ public class TasksEndpoint {
                 .build();
     }
 
-    /*@DELETE
-    @Path("{userId}")
-    public Response deleteUser(@PathParam("userId") Long id,
-                               @QueryParam("token") String token) {
-        if (validateRequest(id, token)) return Response.status(Response.Status.FORBIDDEN).build();
-        userService.deleteUser(id);
+    @DELETE
+    @Path("{taskId}")
+    public Response deleteTask() {
+        if (isForbiddenRequest())
+            return Response.status(Response.Status.FORBIDDEN).build();
+        taskService.deleteTask(taskId);
         return Response.status(Response.Status.NO_CONTENT).build();
-    }*/
+    }
 
     private boolean isForbiddenRequest() {
         if (!jwtService.validateAccessToken(token).isValid()) {

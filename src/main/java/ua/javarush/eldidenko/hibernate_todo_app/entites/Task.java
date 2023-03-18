@@ -31,11 +31,11 @@ public class Task {
     private String description;
 
     @CreationTimestamp
-    @Column(name = "registration_date")
-    private Timestamp registeredAt;
+    @Column(name = "creation_date")
+    private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "last_login_date")
+    @Column(name = "last_update")
     private Timestamp lastUpdate;
 
     @JoinColumn(name = "user_id")
