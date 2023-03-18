@@ -38,7 +38,7 @@ public class TasksEndpoint {
     @GET
     @Produces("application/json")
     public Response getAllUsersTask() {
-        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
 
         List<TaskDTO> tasks = taskService.fetchTasksByUserId(userId);
         return Response
@@ -51,7 +51,7 @@ public class TasksEndpoint {
     @Path("{taskId}")
     @Produces("application/json")
     public Response getOneTask() {
-        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
 
         TaskDTO task = taskService.fetchTasksById(taskId);
         return Response
@@ -65,7 +65,7 @@ public class TasksEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateTask(TaskRequest taskRequest) {
-        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
         TaskDTO updatedTask = taskService.updateTask(taskRequest, taskId);
         return Response
                 .created(URI.create("/users/" + userId + "/tasks/" + updatedTask.getId()))
@@ -77,8 +77,8 @@ public class TasksEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createTask(TaskRequest taskRequest) {
-        if (isForbiddenRequest())
-            return Response.status(Response.Status.FORBIDDEN).build();
+        if (isUnauthorizedRequest())
+            return Response.status(Response.Status.UNAUTHORIZED).build();
 
         TaskDTO taskDTO = taskService.createTask(taskRequest, userId);
         return Response
@@ -90,14 +90,14 @@ public class TasksEndpoint {
     @DELETE
     @Path("{taskId}")
     public Response deleteTask() {
-        if (isForbiddenRequest())
-            return Response.status(Response.Status.FORBIDDEN).build();
+        if (isUnauthorizedRequest())
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         taskService.deleteTask(taskId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    private boolean isForbiddenRequest() {
-        if (!jwtService.validateAccessToken(token).isValid()) {
+    private boolean isUnauthorizedRequest() {
+        if (!jwtService.validateAccessTokenByUserId(token, userId).isValid()) {
             return true;
         }
         if (userService.fetchUserById(userId) == null) {

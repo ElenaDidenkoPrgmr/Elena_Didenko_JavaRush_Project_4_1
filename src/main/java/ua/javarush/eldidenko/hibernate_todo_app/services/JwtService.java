@@ -7,7 +7,7 @@ import ua.javarush.eldidenko.hibernate_todo_app.services.token_entity.Tokens;
 public interface JwtService {
     Tokens generateAndSaveTokens(Long userId);
 
-    TokenValidation validateAccessToken(String token);
+    TokenValidation validateAccessTokenByUserId(String token, Long userId);
 
     Tokens refreshTokens(RefreshTokenRequest refreshToken);
 }

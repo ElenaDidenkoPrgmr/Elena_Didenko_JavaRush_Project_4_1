@@ -49,7 +49,7 @@ public class JwtServiceImpl implements JwtService {
         return new Tokens(accessToken, refreshToken);
     }
 
-    @Override
+    /*@Override
     public TokenValidation validateAccessToken(String token) {
         try {
             Claims claims = decodeJWT(token);
@@ -64,10 +64,29 @@ public class JwtServiceImpl implements JwtService {
                     .isValid(false)
                     .build();
         }
+    }*/
+
+    @Override
+    public TokenValidation validateAccessTokenByUserId(String token, Long userId) {
+        try {
+            Claims claims = decodeJWT(token);
+            Long tokensUserId = claims.get(USER_ID_CLAIM, Long.class);
+            Date expToken = claims.get("exp", Date.class);
+            String userToken = tokenRepository.fetchAccessTokenByUserId(userId);
+            return TokenValidation.builder()
+                    .isValid(userToken.equals(token)
+                            && tokenNotExpired(expToken)
+                            && userId.equals(tokensUserId))
+                    .build();
+        } catch (RuntimeException e) {
+            return TokenValidation.builder()
+                    .isValid(false)
+                    .build();
+        }
     }
 
     @Override
-    public Tokens refreshTokens(RefreshTokenRequest request) throws BadTokenException{
+    public Tokens refreshTokens(RefreshTokenRequest request) throws BadTokenException {
         if (request.getRefreshToken().isBlank()) {
             throw new BadTokenException("refresh token is not present");
         }

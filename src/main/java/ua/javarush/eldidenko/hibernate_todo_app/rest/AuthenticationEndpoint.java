@@ -26,12 +26,13 @@ public class AuthenticationEndpoint {
     }
 
     @GET
+    @Path("{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response validateToken(@QueryParam("token") String token) {
+    public Response validateToken(@QueryParam("token") String token, @PathParam("userId") Long userId) {
         if (token == null || token.isBlank()) {
             throw new WebApplicationException("token is empty ", Response.Status.UNAUTHORIZED);
         }
-        TokenValidation tokenValidation = jwtService.validateAccessToken(token);
+        TokenValidation tokenValidation = jwtService.validateAccessTokenByUserId(token, userId);
         return Response.ok(tokenValidation).build();
     }
 

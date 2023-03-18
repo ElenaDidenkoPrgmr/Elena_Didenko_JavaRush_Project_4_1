@@ -88,7 +88,7 @@ public class UsersEndpoint {
     }
 
     private boolean isUnauthorizedRequest() {
-        if (!jwtService.validateAccessToken(token).isValid()) {
+        if (!jwtService.validateAccessTokenByUserId(token, userId).isValid()) {
             return true;
         }
         if (userService.fetchUserById(userId) == null) {

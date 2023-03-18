@@ -29,34 +29,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserRequest userRequest) throws UserNameIsTakenException {
-        //User existedUser = userRepository.fetchByUserName(userRequest.getUsername());
         hashPassword(userRequest);
-        if (checkNameIsFree(userRequest.getUsername())) {
+        if (checkNameIsTaken(userRequest.getUsername())) {
             User newUser = userRepository.save(userMapper.requestToUser(userRequest));
             return userMapper.userToDTO(newUser);
         } else throw new UserNameIsTakenException();
     }
 
-      /* @Override
-    public UserDTO fetchUserById(Long userId) {
-        User user =  userRepository.fetchById(userId);
-        return userMapper.userToDTO(user);
-    }*/
-
     @Override
     public UserDTO updateUser(UserRequest userRequest, Long userId) throws UserNameIsTakenException {
+        if (checkNameIsTaken(userRequest.getUsername(), userId)) {
+            throw new UserNameIsTakenException();
+        }
 
-        if (checkNameIsFree(userRequest.getUsername(), userId)) {
-            if (userRequest.getPassword()!=null){
-                hashPassword(userRequest);
-            }
+        if (userRequest.getPassword() != null) {
+            hashPassword(userRequest);
+        }
 
-            User userBefore = userRepository.fetchById(userId);
-            User userModified = userMapper.updateUserFromRequest(userBefore, userRequest);
+        User userBefore = userRepository.fetchById(userId);
+        User userModified = userMapper.updateUserFromRequest(userBefore, userRequest);
 
-            User userAfter = userRepository.updateUser(userModified);
-            return userMapper.userToDTO(userAfter);
-        } else throw new UserNameIsTakenException();
+        User userAfter = userRepository.updateUser(userModified);
+        return userMapper.userToDTO(userAfter);
     }
 
     @Override
@@ -64,7 +58,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteUser(id);
     }
 
-    private boolean checkNameIsFree(String username) {
+    private boolean checkNameIsTaken(String username) {
         User existedUser = userRepository.fetchByUserName(username);
         return (existedUser == null);
     }
@@ -79,16 +73,17 @@ public class UserServiceImpl implements UserService {
         String hashPassword = PasswordHash.hash(userRequest.getPassword().toCharArray());
         userRequest.setPassword(hashPassword);
     }
-    private boolean checkNameIsFree(String username, Long challengerId) {
+
+    private boolean checkNameIsTaken(String username, Long challengerId) {
         User existedUser = userRepository.fetchByUserName(username);
-        return (existedUser == null || existedUser.getId().equals(challengerId));
+        return !(existedUser == null || existedUser.getId().equals(challengerId));
     }
 
     @Override
     public Long authenticateUser(String username, char[] password) throws UserUnauthorizedException {
         User user = fetchByUserName(username);
 
-        if (user == null || badPassword(user, password)){
+        if (user == null || badPassword(user, password)) {
             throw new UserUnauthorizedException();
         }
         return user.getId();
