@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(schema = "todoapp",name = "users")
@@ -57,5 +58,9 @@ public class User {
     @OneToOne(mappedBy="user", cascade = CascadeType.REMOVE)
     @PrimaryKeyJoinColumn
     private UserToken userToken;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private List<Task> tasks;
 
 }

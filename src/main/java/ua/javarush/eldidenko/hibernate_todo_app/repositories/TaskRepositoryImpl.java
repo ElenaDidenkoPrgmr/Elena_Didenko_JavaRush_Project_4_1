@@ -36,21 +36,24 @@ public class TaskRepositoryImpl implements TaskRepository{
     @Override
     public List<Task> fetchTasksByUserId(Long userId){
         try (Session session = sessionFactory.openSession()) {
-            String hql = "from Task where user.id = :userId";
+            String hql = "select u.tasks from User u where u.id = :userId";
             Query<Task> query = session.createQuery(hql, Task.class);
             query.setParameter("userId",userId);
             return query.list();
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
-            //return List.of();
         }
     }
 
     @Override
-    public Task save(Task task) {
+    public Task save(Task task, Long userId) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.persist(task);
+            session.flush();
+
+            User user = session.find(User.class,userId);
+            user.getTasks().add(task);
             transaction.commit();
             return task;
         }

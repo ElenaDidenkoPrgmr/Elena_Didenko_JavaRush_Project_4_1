@@ -44,9 +44,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskDTO createTask(TaskRequest taskRequest, Long userId) {
         User user = userRepository.fetchById(userId);
         Task newTask = taskMapper.requestToTask(taskRequest);
-        newTask.setUser(user);
 
-        return taskMapper.taskToDTO(taskRepository.save(newTask));
+        return taskMapper.taskToDTO(taskRepository.save(newTask, userId));
     }
 
     @Override

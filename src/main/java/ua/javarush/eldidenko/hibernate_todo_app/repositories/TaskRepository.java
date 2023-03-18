@@ -8,7 +8,7 @@ public interface TaskRepository {
 
     List<Task> fetchTasksByUserId(Long userId);
 
-    Task save(Task requestToTask);
+    Task save(Task task, Long userId);
 
     Task updateTask(Task updateTask);
 

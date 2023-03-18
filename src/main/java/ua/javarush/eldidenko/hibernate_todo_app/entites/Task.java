@@ -37,8 +37,4 @@ public class Task {
     @UpdateTimestamp
     @Column(name = "last_update")
     private Timestamp lastUpdate;
-
-    @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User user;
 }
