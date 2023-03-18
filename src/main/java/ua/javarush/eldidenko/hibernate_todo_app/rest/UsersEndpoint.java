@@ -19,12 +19,13 @@ public class UsersEndpoint {
     private UserService userService;
     private JwtService jwtService;
     private @PathParam("userId") Long userId;
-    private @QueryParam("token") String token;
+    private String token;
 
     @Context
-    private void setRc(ResourceConfig rc) {
+    private void setRc(ResourceConfig rc, HttpHeaders httpHeaders) {
         userService = (UserService) rc.getProperty("userService");
         jwtService = (JwtService) rc.getProperty("jwtService");
+        token = httpHeaders.getHeaderString("Authorization");
     }
 
 
@@ -47,7 +48,7 @@ public class UsersEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(UserRequest userRequest) {
-        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
 
         UserDTO updatedUser;
         try {
@@ -81,12 +82,12 @@ public class UsersEndpoint {
     @DELETE
     @Path("{userId}")
     public Response deleteUser() {
-        if (isForbiddenRequest()) return Response.status(Response.Status.FORBIDDEN).build();
+        if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
         userService.deleteUser(userId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    private boolean isForbiddenRequest() {
+    private boolean isUnauthorizedRequest() {
         if (!jwtService.validateAccessToken(token).isValid()) {
             return true;
         }

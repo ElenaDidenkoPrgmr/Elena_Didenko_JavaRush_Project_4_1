@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(UserRequest userRequest, Long userId) throws UserNameIsTakenException {
 
-        if (!checkNameIsFree(userRequest.getUsername(), userId)) {
+        if (checkNameIsFree(userRequest.getUsername(), userId)) {
             if (userRequest.getPassword()!=null){
                 hashPassword(userRequest);
             }

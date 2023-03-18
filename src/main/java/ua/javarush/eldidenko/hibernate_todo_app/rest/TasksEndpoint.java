@@ -2,6 +2,7 @@ package ua.javarush.eldidenko.hibernate_todo_app.rest;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
@@ -24,13 +25,14 @@ public class TasksEndpoint {
     private TaskService taskService;
     @PathParam("userId") Long userId;
     @PathParam("taskId") Long taskId;
-    @QueryParam("token") String token;
+    private String token;
 
     @Context
-    private void setRc(ResourceConfig rc) {
+    private void setRc(ResourceConfig rc, HttpHeaders httpHeaders) {
         userService = (UserService) rc.getProperty("userService");
         jwtService = (JwtService) rc.getProperty("jwtService");
         taskService = (TaskService) rc.getProperty("taskService");
+        token = httpHeaders.getHeaderString("Authorization");
     }
 
     @GET
