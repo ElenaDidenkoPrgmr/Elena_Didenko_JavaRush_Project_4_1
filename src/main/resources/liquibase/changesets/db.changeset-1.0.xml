@@ -85,5 +85,4 @@
                                   validate="true"/>
     </changeSet>
 
-
 </databaseChangeLog>
