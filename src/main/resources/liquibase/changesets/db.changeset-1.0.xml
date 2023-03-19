@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="eldidenko" id="1">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(65)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(65)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(65)">
+            </column>
+            <column name="middle_name" type="varchar(65)">
+            </column>
+            <column name="last_name" type="varchar(65)">
+            </column>
+            <column name="email" type="varchar(65)">
+            </column>
+            <column name="registration_date" type="timestamp(6)">
+            </column>
+            <column name="last_login_date" type="timestamp(6)">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="eldidenko" id="2">
+        <createTable tableName="tasks">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+            </column>
+            <column name="title" type="varchar(65)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar(255)">
+            </column>
+
+            <column name="creation_date" type="timestamp(6)">
+            </column>
+            <column name="last_update" type="timestamp(6)">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="eldidenko" id="addForeignKeyConstraint-from-task-to-user">
+        <addForeignKeyConstraint  baseColumnNames="user_id"
+                                  baseTableName="tasks"
+                                  baseTableSchemaName="todoapp"
+                                  constraintName="fk_task_user"
+                                  referencedColumnNames="id"
+                                  referencedTableName="users"
+                                  referencedTableSchemaName="todoapp"
+                                  validate="true"/>
+    </changeSet>
+
+    <changeSet author="eldidenko" id="create-table-user-tokens">
+        <createTable tableName="user_tokens">
+            <column name="user_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="access_token" type="varchar(255)">
+            </column>
+            <column name="refresh_token" type="varchar(255)">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="eldidenko" id="addForeignKeyConstraint-from-token-to-user">
+        <addForeignKeyConstraint  baseColumnNames="user_id"
+                                  baseTableName="user_tokens"
+                                  baseTableSchemaName="todoapp"
+                                  constraintName="fk_token_user"
+                                  referencedColumnNames="id"
+                                  referencedTableName="users"
+                                  referencedTableSchemaName="todoapp"
+                                  validate="true"/>
+    </changeSet>
+
+
+</databaseChangeLog>

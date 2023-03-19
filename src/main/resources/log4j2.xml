@@ -13,6 +13,18 @@
             </Policies>
         </RollingFile>
 
+        <RollingFile name="RollingFileLiquibase" fileName="logs/Liquibase.log"
+                     filePattern="logs/$${date:yyyy-MM}/Liquibase-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <DefaultRolloverStrategy max="20"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB"/>
+            </Policies>
+        </RollingFile>
+
         <RollingFile name="RollingFileRestResourceListener" fileName="logs/restResourceListener.log"
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
@@ -52,7 +64,10 @@
             <AppenderRef ref="RollingFileRestResourceListener"/>
         </Logger>
 
-
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.migration.LiquibaseConfiguration" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileLiquibase"/>
+        </Logger>
 
         <Root level="warn">
             <AppenderRef ref="Console"/>

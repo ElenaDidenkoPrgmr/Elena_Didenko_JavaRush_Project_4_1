@@ -14,6 +14,7 @@ import java.net.URI;
 
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.IllegalArgumentExceptionMapper;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.ServerExceptionMapper;
+import ua.javarush.eldidenko.hibernate_todo_app.migration.LiquibaseConfiguration;
 import ua.javarush.eldidenko.hibernate_todo_app.provider.HibernateSessionProvider;
 import ua.javarush.eldidenko.hibernate_todo_app.provider.SessionProvider;
 import ua.javarush.eldidenko.hibernate_todo_app.repositories.*;
@@ -31,6 +32,8 @@ public class Main {
     }*/
 
     public static HttpServer startServer() {
+        new LiquibaseConfiguration().update();
+
         SessionProvider sessionProvider = new HibernateSessionProvider();
         SessionFactory sessionFactory = sessionProvider.getSessionFactory();
 
