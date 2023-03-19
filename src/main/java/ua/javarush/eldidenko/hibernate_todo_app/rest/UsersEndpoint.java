@@ -13,19 +13,22 @@ import ua.javarush.eldidenko.hibernate_todo_app.services.UserService;
 
 import java.net.URI;
 
+import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.*;
+
 @Path("/users")
 public class UsersEndpoint {
     private static final Logger LOGGER = LogManager.getLogger(UsersEndpoint.class);
+    private static final String USERNAME_TAKEN_MESSAGE = "username is taken: ";
     private UserService userService;
     private JwtService jwtService;
-    private @PathParam("userId") Long userId;
+    private @PathParam(PATH_PARAM_USER_ID) Long userId;
     private String token;
 
     @Context
     private void setRc(ResourceConfig rc, HttpHeaders httpHeaders) {
-        userService = (UserService) rc.getProperty("userService");
-        jwtService = (JwtService) rc.getProperty("jwtService");
-        token = httpHeaders.getHeaderString("Authorization");
+        userService = (UserService) rc.getProperty(USER_SERVICE);
+        jwtService = (JwtService) rc.getProperty(JWT_SERVICE);
+        token = httpHeaders.getHeaderString(HEADER_TOKEN);
     }
 
 
@@ -35,7 +38,7 @@ public class UsersEndpoint {
     public Response getUser() {
         UserDTO userDTO = userService.fetchUserById(userId);
         if (userDTO == null) {
-            throw new WebApplicationException("user not found: " + userId, Response.Status.NOT_FOUND);
+            throw new WebApplicationException(USER_NOT_FOUND_MESSAGE + userId, Response.Status.NOT_FOUND);
         }
         return Response
                 .status(Response.Status.OK)
@@ -54,7 +57,7 @@ public class UsersEndpoint {
         try {
             updatedUser = userService.updateUser(userRequest, userId);
         } catch (UserNameIsTakenException e) {
-            throw new WebApplicationException("username is taken: " + userRequest.getUsername(), Response.Status.CONFLICT);
+            throw new WebApplicationException(USERNAME_TAKEN_MESSAGE + userRequest.getUsername(), Response.Status.CONFLICT);
         }
         return Response
                 .created(URI.create("/users/" + userId))
@@ -71,7 +74,7 @@ public class UsersEndpoint {
         try {
             userDTO = userService.createUser(userRequest);
         } catch (UserNameIsTakenException e) {
-            throw new WebApplicationException("username is taken: " + userRequest.getUsername(), Response.Status.CONFLICT);
+            throw new WebApplicationException(USERNAME_TAKEN_MESSAGE + userRequest.getUsername(), Response.Status.CONFLICT);
         }
         return Response
                 .created(URI.create("/users/" + userDTO.getId()))
@@ -92,7 +95,7 @@ public class UsersEndpoint {
             return true;
         }
         if (userService.fetchUserById(userId) == null) {
-            throw new WebApplicationException("user not found: " + userId, Response.Status.NOT_FOUND);
+            throw new WebApplicationException(USER_NOT_FOUND_MESSAGE + userId, Response.Status.NOT_FOUND);
         }
         return false;
     }

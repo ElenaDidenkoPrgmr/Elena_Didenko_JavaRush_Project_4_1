@@ -19,6 +19,8 @@ import ua.javarush.eldidenko.hibernate_todo_app.provider.SessionProvider;
 import ua.javarush.eldidenko.hibernate_todo_app.repositories.*;
 import ua.javarush.eldidenko.hibernate_todo_app.services.*;
 
+import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.*;
+
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
     public static final String BASE_URI = "http://localhost:8080/";
@@ -46,10 +48,10 @@ public class Main {
                 .register(ServerExceptionMapper.class)
 
                 .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
-                .property("sessionFactory", sessionFactory)
-                .property("userService", userService)
-                .property("jwtService", jwtService)
-                .property("taskService", taskService)
+                .property(SESSION_FACTORY, sessionFactory)
+                .property(USER_SERVICE, userService)
+                .property(JWT_SERVICE, jwtService)
+                .property(TASK_SERVICE, taskService)
                 .packages("ua.javarush.eldidenko.hibernate_todo_app.rest");
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);

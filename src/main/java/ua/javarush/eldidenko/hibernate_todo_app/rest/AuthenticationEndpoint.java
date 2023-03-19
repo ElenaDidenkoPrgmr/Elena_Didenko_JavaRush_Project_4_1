@@ -14,6 +14,9 @@ import ua.javarush.eldidenko.hibernate_todo_app.services.UserService;
 import ua.javarush.eldidenko.hibernate_todo_app.services.token_entity.TokenValidation;
 import ua.javarush.eldidenko.hibernate_todo_app.services.token_entity.Tokens;
 
+import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.JWT_SERVICE;
+import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.USER_SERVICE;
+
 @Path("/authentication")
 public class AuthenticationEndpoint {
     private UserService userService;
@@ -21,8 +24,8 @@ public class AuthenticationEndpoint {
 
     @Context
     private void setRc(ResourceConfig rc) {
-        userService = (UserService) rc.getProperty("userService");
-        jwtService = (JwtService) rc.getProperty("jwtService");
+        userService = (UserService) rc.getProperty(USER_SERVICE);
+        jwtService = (JwtService) rc.getProperty(JWT_SERVICE);
     }
 
     @GET

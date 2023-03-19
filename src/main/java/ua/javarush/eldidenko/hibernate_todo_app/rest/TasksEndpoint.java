@@ -17,22 +17,24 @@ import ua.javarush.eldidenko.hibernate_todo_app.services.UserService;
 import java.net.URI;
 import java.util.List;
 
+import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.*;
+
 @Path("/users/{userId}/tasks")
 public class TasksEndpoint {
     private static final Logger LOGGER = LogManager.getLogger(TasksEndpoint.class);
     private UserService userService;
     private JwtService jwtService;
     private TaskService taskService;
-    @PathParam("userId") Long userId;
-    @PathParam("taskId") Long taskId;
+    @PathParam(PATH_PARAM_USER_ID) Long userId;
+    @PathParam(PATH_PARAM_TASK_ID) Long taskId;
     private String token;
 
     @Context
     private void setRc(ResourceConfig rc, HttpHeaders httpHeaders) {
-        userService = (UserService) rc.getProperty("userService");
-        jwtService = (JwtService) rc.getProperty("jwtService");
-        taskService = (TaskService) rc.getProperty("taskService");
-        token = httpHeaders.getHeaderString("Authorization");
+        userService = (UserService) rc.getProperty(USER_SERVICE);
+        jwtService = (JwtService) rc.getProperty(JWT_SERVICE);
+        taskService = (TaskService) rc.getProperty(TASK_SERVICE);
+        token = httpHeaders.getHeaderString(HEADER_TOKEN);
     }
 
     @GET
@@ -101,7 +103,7 @@ public class TasksEndpoint {
             return true;
         }
         if (userService.fetchUserById(userId) == null) {
-            throw new WebApplicationException("user not found: " + userId, Response.Status.NOT_FOUND);
+            throw new WebApplicationException(USER_NOT_FOUND_MESSAGE + userId, Response.Status.NOT_FOUND);
         }
         return false;
     }
