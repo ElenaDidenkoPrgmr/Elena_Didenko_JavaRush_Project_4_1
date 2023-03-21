@@ -22,10 +22,6 @@ public interface UserMapper {
     @Mapping(source = "password", target = "password", qualifiedByName = "passwordParser")
     User requestToUser(AuthenticationRequest authenticationRequest);
 
-    /*@Named("passwordParser")
-    static String charArrayToString(char[] password) {
-        return password.toString();
-    }*/
     @Named("passwordParser")
     static String charArrayToString(char[] password) {
         return Arrays.toString(password);

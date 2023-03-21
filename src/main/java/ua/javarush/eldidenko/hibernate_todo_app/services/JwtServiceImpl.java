@@ -49,23 +49,6 @@ public class JwtServiceImpl implements JwtService {
         return new Tokens(accessToken, refreshToken);
     }
 
-    /*@Override
-    public TokenValidation validateAccessToken(String token) {
-        try {
-            Claims claims = decodeJWT(token);
-            Long userId = claims.get(USER_ID_CLAIM, Long.class);
-            Date expToken = claims.get("exp", Date.class);
-            String userToken = tokenRepository.fetchAccessTokenByUserId(userId);
-            return TokenValidation.builder()
-                    .isValid(userToken.equals(token) && tokenNotExpired(expToken))
-                    .build();
-        } catch (RuntimeException e) {
-            return TokenValidation.builder()
-                    .isValid(false)
-                    .build();
-        }
-    }*/
-
     @Override
     public TokenValidation validateAccessTokenByUserId(String token, Long userId) {
         try {

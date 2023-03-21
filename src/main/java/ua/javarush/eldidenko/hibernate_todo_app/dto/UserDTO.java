@@ -1,7 +1,5 @@
 package ua.javarush.eldidenko.hibernate_todo_app.dto;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Data;
 

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ua.javarush.eldidenko.hibernate_todo_app.rest.Listener.UserListener;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EntityListeners(UserListener.class)
 
 public class User {
     @Id

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <RollingFile name="RollingFileHttpServer" fileName="logs/grizzlyHttpServer.log"
-                     filePattern="logs/$${date:yyyy-MM}/grizzlyHttpServer-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="RollingFileServices" fileName="logs/services.log"
+                     filePattern="logs/$${date:yyyy-MM}/services-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -13,8 +13,8 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="RollingFileLiquibase" fileName="logs/Liquibase.log"
-                     filePattern="logs/$${date:yyyy-MM}/Liquibase-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="RollingFileRestListener" fileName="logs/RestListener.log"
+                     filePattern="logs/$${date:yyyy-MM}/RestListener-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -25,8 +25,8 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="RollingFileRestResourceListener" fileName="logs/restResourceListener.log"
-                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="RollingFileAuthentication" fileName="logs/authentication.log"
+                     filePattern="logs/$${date:yyyy-MM}/authentication-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -56,17 +56,22 @@
     <Loggers>
         <Logger name="ua.javarush.eldidenko.hibernate_todo_app.Main" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFileHttpServer"/>
-        </Logger>
-
-        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.rest" level="debug" additivity="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFileRestResourceListener"/>
+            <AppenderRef ref="RollingFileServices"/>
         </Logger>
 
         <Logger name="ua.javarush.eldidenko.hibernate_todo_app.migration.LiquibaseConfiguration" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFileLiquibase"/>
+            <AppenderRef ref="RollingFileServices"/>
+        </Logger>
+
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.rest.Listener.UserListener" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileRestListener"/>
+        </Logger>
+
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.rest.AuthenticationEndpoint" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileAuthentication"/>
         </Logger>
 
         <Root level="warn">

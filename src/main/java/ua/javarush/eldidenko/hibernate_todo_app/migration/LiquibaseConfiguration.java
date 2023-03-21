@@ -11,7 +11,6 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.javarush.eldidenko.hibernate_todo_app.Main;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.StartupFailedException;
 
 import java.sql.Connection;
@@ -47,8 +46,6 @@ public class LiquibaseConfiguration {
         properties.put("driverClassName", "org.postgresql.Driver");
         properties.put("jdbcUrl", "jdbc:postgresql://localhost:5432/todo");
         properties.put("schema", "todoapp");
-        /* properties.put("driverClassName", "com.p6spy.engine.spy.P6SpyDriver");
-        properties.put("jdbcUrl", "jdbc:p6spy:postgresql://localhost:5432/todo");*/
         properties.put("username", "postgres");
         properties.put("password", "qazwsx");
 
@@ -60,15 +57,5 @@ public class LiquibaseConfiguration {
         }
 
         return properties;
-    }
-
-    private String fetchEnvPropertyValue(String name) {
-        String value = System.getenv(name);
-
-        if (value == null) {
-            throw new StartupFailedException("Mandatory environment property '" + name + "' is not defined.");
-        }
-
-        return value;
     }
 }

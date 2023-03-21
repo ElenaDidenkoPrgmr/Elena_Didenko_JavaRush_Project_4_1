@@ -2,19 +2,22 @@ package ua.javarush.eldidenko.hibernate_todo_app.entites;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ua.javarush.eldidenko.hibernate_todo_app.rest.Listener.UserListener;
+import ua.javarush.eldidenko.hibernate_todo_app.rest.Listener.UserTokenListener;
 
 @Entity
-@Table(schema = "todoapp",name = "user_tokens")
+@Table(schema = "todoapp", name = "user_tokens")
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@EntityListeners(UserTokenListener.class)
 
 public class UserToken {
     @Id
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "access_token")

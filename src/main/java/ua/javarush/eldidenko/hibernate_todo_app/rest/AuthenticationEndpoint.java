@@ -1,24 +1,35 @@
 package ua.javarush.eldidenko.hibernate_todo_app.rest;
 
+import jakarta.servlet.annotation.HttpConstraint;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.BadTokenException;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.UserUnauthorizedException;
 import ua.javarush.eldidenko.hibernate_todo_app.request.AuthenticationRequest;
 import ua.javarush.eldidenko.hibernate_todo_app.request.RefreshTokenRequest;
+import ua.javarush.eldidenko.hibernate_todo_app.rest.Listener.UserTokenListener;
 import ua.javarush.eldidenko.hibernate_todo_app.services.JwtService;
 import ua.javarush.eldidenko.hibernate_todo_app.services.UserService;
 import ua.javarush.eldidenko.hibernate_todo_app.services.token_entity.TokenValidation;
 import ua.javarush.eldidenko.hibernate_todo_app.services.token_entity.Tokens;
+
+import java.net.http.HttpRequest;
 
 import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.JWT_SERVICE;
 import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.USER_SERVICE;
 
 @Path("/authentication")
 public class AuthenticationEndpoint {
+    private static final Logger LOGGER = LogManager.getLogger(AuthenticationEndpoint.class);
+    public static final String LOGGER_MESSAGE_UNSUCCESS_VALIDATE_TOKEN = "[USER_TOKEN AUDIT] wrong token: userId = {}, token = {} ";
+    public static final String LOGGER_MESSAGE_UNSUCCESS_LOGIN = "[USER_AUTH AUDIT] wrong credential: username = {}";
+
     private UserService userService;
     private JwtService jwtService;
 
@@ -33,9 +44,13 @@ public class AuthenticationEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response validateToken(@QueryParam("token") String token, @PathParam("userId") Long userId) {
         if (token == null || token.isBlank()) {
+            LOGGER.warn(LOGGER_MESSAGE_UNSUCCESS_VALIDATE_TOKEN, userId,token);
             throw new WebApplicationException("token is empty ", Response.Status.UNAUTHORIZED);
         }
         TokenValidation tokenValidation = jwtService.validateAccessTokenByUserId(token, userId);
+
+        if (!tokenValidation.isValid()) LOGGER.warn(LOGGER_MESSAGE_UNSUCCESS_VALIDATE_TOKEN, userId,token);
+
         return Response.ok(tokenValidation).build();
     }
 
@@ -49,6 +64,7 @@ public class AuthenticationEndpoint {
             return Response.ok(tokens).build();
 
         } catch (UserUnauthorizedException unauthorized) {
+            LOGGER.warn(LOGGER_MESSAGE_UNSUCCESS_LOGIN, credentials.getUsername());
             return Response.status(Response.Status.UNAUTHORIZED)
                     .build();
         }
