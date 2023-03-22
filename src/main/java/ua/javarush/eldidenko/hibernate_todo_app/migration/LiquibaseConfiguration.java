@@ -12,6 +12,7 @@ import liquibase.resource.ResourceAccessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.StartupFailedException;
+import ua.javarush.eldidenko.hibernate_todo_app.utils.DbSettings;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -41,13 +42,14 @@ public class LiquibaseConfiguration {
     }
 
     private Properties readEnvProperties() {
-        Properties properties = new Properties();
+        DbSettings dbSettings = new DbSettings();
 
-        properties.put("driverClassName", "org.postgresql.Driver");
-        properties.put("jdbcUrl", "jdbc:postgresql://localhost:5432/todo");
-        properties.put("schema", "todoapp");
-        properties.put("username", "postgres");
-        properties.put("password", "qazwsx");
+        Properties properties = new Properties();
+        properties.put("driverClassName", dbSettings.dbProperties().getProperty("driver_class"));
+        properties.put("jdbcUrl", dbSettings.dbProperties().getProperty("url"));
+        properties.put("schema", dbSettings.dbProperties().getProperty("liquibase.schema"));
+        properties.put("username", dbSettings.dbProperties().getProperty("username"));
+        properties.put("password", dbSettings.dbProperties().getProperty("password"));
 
         String connectionPoolSize = System.getenv("LIQUIBASE_CONNECTION_POOL_SIZE");
         if (connectionPoolSize != null) {
