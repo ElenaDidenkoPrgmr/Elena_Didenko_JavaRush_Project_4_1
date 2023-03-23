@@ -9,7 +9,9 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 public class PasswordHash {
-    private static final String HASH_SALT = "njcj@MKW9@%</C";
+    private static final String HASH_SALT = System.getenv("HASH_SALT") == null?
+            "njcj@MKW9@%</C"
+            :System.getenv("HASH_SALT");
 
     @SneakyThrows
     public static String hash(char[] password) {

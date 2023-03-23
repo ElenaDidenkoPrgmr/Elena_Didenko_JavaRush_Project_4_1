@@ -18,8 +18,8 @@ public class HibernateSessionProvider implements SessionProvider{
         Properties properties = new Properties();
         properties.put(Environment.DRIVER, dbSettings.dbProperties().getProperty("driver_class"));
         properties.put(Environment.URL, dbSettings.dbProperties().getProperty("url"));
-        properties.put(Environment.USER, dbSettings.dbProperties().getProperty("username"));
-        properties.put(Environment.PASS, dbSettings.dbProperties().getProperty("password"));
+        properties.put(Environment.USER, System.getenv("DB_USER"));
+        properties.put(Environment.PASS, System.getenv("DB_PASS"));
         properties.put(Environment.DIALECT, dbSettings.dbProperties().getProperty("dialect"));
         properties.put(Environment.SHOW_SQL, dbSettings.dbProperties().getProperty("hibernate.show_sql"));
         properties.put(Environment.HBM2DDL_AUTO, dbSettings.dbProperties().getProperty("hibernate.hbm2ddl.auto"));

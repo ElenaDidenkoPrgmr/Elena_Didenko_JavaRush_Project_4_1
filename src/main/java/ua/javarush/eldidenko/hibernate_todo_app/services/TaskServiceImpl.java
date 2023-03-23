@@ -2,7 +2,6 @@ package ua.javarush.eldidenko.hibernate_todo_app.services;
 
 import ua.javarush.eldidenko.hibernate_todo_app.dto.TaskDTO;
 import ua.javarush.eldidenko.hibernate_todo_app.entites.Task;
-import ua.javarush.eldidenko.hibernate_todo_app.entites.User;
 import ua.javarush.eldidenko.hibernate_todo_app.mappers.TaskMapper;
 import ua.javarush.eldidenko.hibernate_todo_app.repositories.TaskRepository;
 import ua.javarush.eldidenko.hibernate_todo_app.repositories.UserRepository;
@@ -12,13 +11,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaskServiceImpl implements TaskService {
-    private TaskRepository taskRepository;
-    private UserRepository userRepository;
-    private TaskMapper taskMapper;
+    private final TaskRepository taskRepository;
+    private final TaskMapper taskMapper;
 
-    public TaskServiceImpl(TaskRepository taskRepository, UserRepository userRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
         this.taskMapper = TaskMapper.INCTANCE;
     }
 
@@ -42,9 +39,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO createTask(TaskRequest taskRequest, Long userId) {
-        User user = userRepository.fetchById(userId);
         Task newTask = taskMapper.requestToTask(taskRequest);
-
         return taskMapper.taskToDTO(taskRepository.save(newTask, userId));
     }
 

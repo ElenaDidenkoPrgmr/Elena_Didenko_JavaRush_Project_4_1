@@ -42,7 +42,7 @@ public class Main {
         TokenRepository tokenRepository = new TokenRepositoryImpl(sessionFactory);
         JwtService jwtService = new JwtServiceImpl(tokenRepository, userRepository);
         TaskRepository taskRepository = new TaskRepositoryImpl(sessionFactory);
-        TaskService taskService = new TaskServiceImpl(taskRepository, userRepository);
+        TaskService taskService = new TaskServiceImpl(taskRepository);
 
         final ResourceConfig rc = new ResourceConfig()
                 .register(new LoggingFeature(java.util.logging.Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME),
@@ -55,7 +55,7 @@ public class Main {
                 .property(USER_SERVICE, userService)
                 .property(JWT_SERVICE, jwtService)
                 .property(TASK_SERVICE, taskService)
-                .packages("ua.javarush.eldidenko.hibernate_todo_app.rest");
+                .packages("ua.javarush.eldidenko.hibernate_todo_app.resources");
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }

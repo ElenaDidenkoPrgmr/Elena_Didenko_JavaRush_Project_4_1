@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import ua.javarush.eldidenko.hibernate_todo_app.rest.Listener.UserListener;
+import ua.javarush.eldidenko.hibernate_todo_app.resources.Listener.UserListener;
 
 import java.sql.Timestamp;
 import java.util.List;

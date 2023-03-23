@@ -23,12 +23,14 @@ import java.util.UUID;
 
 public class JwtServiceImpl implements JwtService {
     private static final String USER_ID_CLAIM = "userId";
-    public static final String JWT_SECRET_KEY_ENV = "dcsZL{DSX_(*^@HUDHggdhdh8";
+    public static final String JWT_SECRET_KEY_ENV = System.getenv("JWT_SECRET_KEY") == null?
+            "dcsZL{DSX_(*^@HUDHggdhdh8"
+            :System.getenv("JWT_SECRET_KEY");
     public static final int ACCESS_TOKEN_EXPIRE_MILLIS = (60 /* mins */ * 60 /* sec in min */ * 1000 /* millisecond in sec */);
     public static final int REFRESH_TOKEN_EXPIRE_MILLIS = (24 /*hours*/ * 60 /* mins */ * 60 /* sec in min */ * 1000 /* millisecond in sec */);
 
-    private TokenRepository tokenRepository;
-    private UserRepository userRepository;
+    private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
 
     public JwtServiceImpl(TokenRepository tokenRepository, UserRepository userRepository) {
         this.tokenRepository = tokenRepository;

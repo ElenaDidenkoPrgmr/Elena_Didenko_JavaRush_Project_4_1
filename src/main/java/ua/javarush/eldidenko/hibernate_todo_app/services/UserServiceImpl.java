@@ -10,8 +10,8 @@ import ua.javarush.eldidenko.hibernate_todo_app.request.UserRequest;
 import ua.javarush.eldidenko.hibernate_todo_app.utils.PasswordHash;
 
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
-    private UserMapper userMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;

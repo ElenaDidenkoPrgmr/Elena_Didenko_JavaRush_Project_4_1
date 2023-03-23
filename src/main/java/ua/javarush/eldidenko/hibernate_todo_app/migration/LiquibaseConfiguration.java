@@ -11,6 +11,7 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.cfg.Environment;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.StartupFailedException;
 import ua.javarush.eldidenko.hibernate_todo_app.utils.DbSettings;
 
@@ -37,7 +38,9 @@ public class LiquibaseConfiguration {
 
             liquiBase.update();
         } catch (SQLException | LiquibaseException e) {
-            throw new StartupFailedException("Can;t startup. Reason: " + e.getMessage(), e);
+            String errorMassage = "Can;t startup. Reason: " + e.getMessage();
+            LOGGER.error(errorMassage);
+            throw new StartupFailedException(errorMassage, e);
         }
     }
 
@@ -48,8 +51,8 @@ public class LiquibaseConfiguration {
         properties.put("driverClassName", dbSettings.dbProperties().getProperty("driver_class"));
         properties.put("jdbcUrl", dbSettings.dbProperties().getProperty("url"));
         properties.put("schema", dbSettings.dbProperties().getProperty("liquibase.schema"));
-        properties.put("username", dbSettings.dbProperties().getProperty("username"));
-        properties.put("password", dbSettings.dbProperties().getProperty("password"));
+        properties.put("username", System.getenv("DB_USER"));
+        properties.put("password", System.getenv("DB_PASS"));
 
         String connectionPoolSize = System.getenv("LIQUIBASE_CONNECTION_POOL_SIZE");
         if (connectionPoolSize != null) {

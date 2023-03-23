@@ -64,12 +64,12 @@
             <AppenderRef ref="RollingFileServices"/>
         </Logger>
 
-        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.rest.Listener.UserListener" level="debug" additivity="false">
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.resources.Listener.UserListener" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFileRestListener"/>
         </Logger>
 
-        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.rest.AuthenticationEndpoint" level="warn" additivity="false">
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.resources.AuthenticationEndpoint" level="warn" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFileAuthentication"/>
         </Logger>

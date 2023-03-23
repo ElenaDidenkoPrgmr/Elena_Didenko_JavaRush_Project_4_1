@@ -1,4 +1,4 @@
-package ua.javarush.eldidenko.hibernate_todo_app.rest;
+package ua.javarush.eldidenko.hibernate_todo_app.resources;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;

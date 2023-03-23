@@ -1,7 +1,5 @@
-package ua.javarush.eldidenko.hibernate_todo_app.rest;
+package ua.javarush.eldidenko.hibernate_todo_app.resources;
 
-import jakarta.servlet.annotation.HttpConstraint;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -13,13 +11,10 @@ import ua.javarush.eldidenko.hibernate_todo_app.exceptions.BadTokenException;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.UserUnauthorizedException;
 import ua.javarush.eldidenko.hibernate_todo_app.request.AuthenticationRequest;
 import ua.javarush.eldidenko.hibernate_todo_app.request.RefreshTokenRequest;
-import ua.javarush.eldidenko.hibernate_todo_app.rest.Listener.UserTokenListener;
 import ua.javarush.eldidenko.hibernate_todo_app.services.JwtService;
 import ua.javarush.eldidenko.hibernate_todo_app.services.UserService;
 import ua.javarush.eldidenko.hibernate_todo_app.services.token_entity.TokenValidation;
 import ua.javarush.eldidenko.hibernate_todo_app.services.token_entity.Tokens;
-
-import java.net.http.HttpRequest;
 
 import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.JWT_SERVICE;
 import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.USER_SERVICE;
