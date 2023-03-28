@@ -1,5 +1,6 @@
 package ua.javarush.eldidenko.hibernate_todo_app.resources;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +18,6 @@ import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.*;
 
 @Path("/users")
 public class UsersEndpoint {
-    private static final Logger LOGGER = LogManager.getLogger(UsersEndpoint.class);
     private static final String USERNAME_TAKEN_MESSAGE = "username is taken: ";
     private UserService userService;
     private JwtService jwtService;
@@ -50,7 +50,7 @@ public class UsersEndpoint {
     @Path("{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(UserRequest userRequest) {
+    public Response updateUser(@Valid UserRequest userRequest) {
         if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
 
         UserDTO updatedUser;
@@ -68,7 +68,7 @@ public class UsersEndpoint {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(UserRequest userRequest) {
+    public Response createUser(@Valid UserRequest userRequest) {
 
         UserDTO userDTO;
         try {

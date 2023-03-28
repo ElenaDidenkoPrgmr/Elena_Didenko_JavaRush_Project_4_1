@@ -1,5 +1,6 @@
 package ua.javarush.eldidenko.hibernate_todo_app.resources;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -21,7 +22,6 @@ import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.*;
 
 @Path("/users/{userId}/tasks")
 public class TasksEndpoint {
-    private static final Logger LOGGER = LogManager.getLogger(TasksEndpoint.class);
     private UserService userService;
     private JwtService jwtService;
     private TaskService taskService;
@@ -66,7 +66,7 @@ public class TasksEndpoint {
     @Path("{taskId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTask(TaskRequest taskRequest) {
+    public Response updateTask(@Valid TaskRequest taskRequest) {
         if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
         TaskDTO updatedTask = taskService.updateTask(taskRequest, taskId);
         return Response
@@ -78,7 +78,7 @@ public class TasksEndpoint {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createTask(TaskRequest taskRequest) {
+    public Response createTask(@Valid TaskRequest taskRequest) {
         if (isUnauthorizedRequest())
             return Response.status(Response.Status.UNAUTHORIZED).build();
 
