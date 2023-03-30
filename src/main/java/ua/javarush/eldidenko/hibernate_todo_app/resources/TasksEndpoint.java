@@ -6,8 +6,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 import ua.javarush.eldidenko.hibernate_todo_app.dto.TaskDTO;
 import ua.javarush.eldidenko.hibernate_todo_app.request.TaskRequest;
@@ -66,7 +64,7 @@ public class TasksEndpoint {
     @Path("{taskId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTask(@Valid TaskRequest taskRequest) {
+    public Response updateTask(TaskRequest taskRequest) {
         if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
         TaskDTO updatedTask = taskService.updateTask(taskRequest, taskId);
         return Response

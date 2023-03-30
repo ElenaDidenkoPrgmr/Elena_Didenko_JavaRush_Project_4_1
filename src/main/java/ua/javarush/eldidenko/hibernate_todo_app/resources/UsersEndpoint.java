@@ -3,8 +3,6 @@ package ua.javarush.eldidenko.hibernate_todo_app.resources;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 import ua.javarush.eldidenko.hibernate_todo_app.dto.UserDTO;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.UserNameIsTakenException;
@@ -50,7 +48,7 @@ public class UsersEndpoint {
     @Path("{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(@Valid UserRequest userRequest) {
+    public Response updateUser(UserRequest userRequest) {
         if (isUnauthorizedRequest()) return Response.status(Response.Status.UNAUTHORIZED).build();
 
         UserDTO updatedUser;

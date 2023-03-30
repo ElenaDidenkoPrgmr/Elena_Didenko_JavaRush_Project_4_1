@@ -1,4 +1,4 @@
-package ua.javarush.eldidenko.hibernate_todo_app.resources.Listener;
+package ua.javarush.eldidenko.hibernate_todo_app.Listener;
 
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreRemove;

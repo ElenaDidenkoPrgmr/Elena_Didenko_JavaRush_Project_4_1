@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration status="DEBUG">
     <Appenders>
         <RollingFile name="RollingFileServices" fileName="logs/services.log"
                      filePattern="logs/$${date:yyyy-MM}/services-%d{MM-dd-yyyy}-%i.log.gz">
@@ -13,8 +13,20 @@
             </Policies>
         </RollingFile>
 
-        <RollingFile name="RollingFileRestListener" fileName="logs/RestListener.log"
-                     filePattern="logs/$${date:yyyy-MM}/RestListener-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="RollingFileEntityListener" fileName="logs/EntityListener.log"
+                     filePattern="logs/$${date:yyyy-MM}/EntityListener-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <DefaultRolloverStrategy max="20"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RollingFileResourcesListener" fileName="logs/ResourcesListener.log"
+                     filePattern="logs/$${date:yyyy-MM}/ResourcesListener-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -64,9 +76,14 @@
             <AppenderRef ref="RollingFileServices"/>
         </Logger>
 
-        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.resources.Listener.UserListener" level="debug" additivity="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFileRestListener"/>
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.Listener.UserListener" level="debug" additivity="false">
+
+            <AppenderRef ref="RollingFileEntityListener"/>
+        </Logger>
+
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.Listener.ResourcesLoggingFilter" level="debug" additivity="false">
+
+            <AppenderRef ref="RollingFileResourcesListener"/>
         </Logger>
 
         <Logger name="ua.javarush.eldidenko.hibernate_todo_app.resources.AuthenticationEndpoint" level="warn" additivity="false">

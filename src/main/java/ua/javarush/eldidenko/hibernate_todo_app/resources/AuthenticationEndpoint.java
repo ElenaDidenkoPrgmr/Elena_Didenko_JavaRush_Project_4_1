@@ -1,5 +1,6 @@
 package ua.javarush.eldidenko.hibernate_todo_app.resources;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -52,7 +53,7 @@ public class AuthenticationEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createTokens(AuthenticationRequest credentials) {
+    public Response createTokens(@Valid AuthenticationRequest credentials) {
         try {
             Long userId = userService.authenticateUser(credentials.getUsername(), credentials.getPassword());
             Tokens tokens = jwtService.generateAndSaveTokens(userId);
@@ -68,7 +69,7 @@ public class AuthenticationEndpoint {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateTokens(RefreshTokenRequest refreshToken) {
+    public Response updateTokens(@Valid RefreshTokenRequest refreshToken) {
         Tokens newTokens;
         try {
             newTokens = jwtService.refreshTokens(refreshToken);

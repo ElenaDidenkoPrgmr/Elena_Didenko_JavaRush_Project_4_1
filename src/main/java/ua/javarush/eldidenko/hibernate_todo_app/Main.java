@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.logging.Level;
 
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.IllegalArgumentExceptionMapper;
 import ua.javarush.eldidenko.hibernate_todo_app.exceptions.ServerExceptionMapper;
@@ -19,17 +20,14 @@ import ua.javarush.eldidenko.hibernate_todo_app.provider.HibernateSessionProvide
 import ua.javarush.eldidenko.hibernate_todo_app.provider.SessionProvider;
 import ua.javarush.eldidenko.hibernate_todo_app.repositories.*;
 import ua.javarush.eldidenko.hibernate_todo_app.services.*;
+import ua.javarush.eldidenko.hibernate_todo_app.Listener.ResourcesLoggingFilter;
 
 import static ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants.*;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
-    public static final String BASE_URI = "http://localhost:8080/";
+    private static final String BASE_URI = "http://localhost:8080/";
 
-   /* @PostConstruct
-    public void init() {
-        System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager");
-    }*/
 
     public static HttpServer startServer() {
         new LiquibaseConfiguration().update();
@@ -46,9 +44,10 @@ public class Main {
 
         final ResourceConfig rc = new ResourceConfig()
                 .register(new LoggingFeature(java.util.logging.Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME),
-                        java.util.logging.Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 10000))
+                        Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 10000))
                 .register(IllegalArgumentExceptionMapper.class)
                 .register(ServerExceptionMapper.class)
+                .register(ResourcesLoggingFilter.class)
 
                 .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                 .property(SESSION_FACTORY, sessionFactory)

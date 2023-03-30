@@ -2,7 +2,7 @@ package ua.javarush.eldidenko.hibernate_todo_app.entites;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ua.javarush.eldidenko.hibernate_todo_app.resources.Listener.UserTokenListener;
+import ua.javarush.eldidenko.hibernate_todo_app.Listener.UserTokenListener;
 
 @Entity
 @Table(schema = "todoapp", name = "user_tokens")
