@@ -8,6 +8,7 @@ import ua.javarush.eldidenko.hibernate_todo_app.entites.Task;
 import ua.javarush.eldidenko.hibernate_todo_app.entites.User;
 import ua.javarush.eldidenko.hibernate_todo_app.entites.UserToken;
 import ua.javarush.eldidenko.hibernate_todo_app.provider.SessionProvider;
+
 import java.util.Properties;
 
 import static java.lang.String.format;
@@ -18,9 +19,10 @@ public class HibernateSessionProviderInit implements SessionProvider {
     public HibernateSessionProviderInit(PostgreSQLContainer postgreSQLContainer) {
         this.postgreSQLContainer = postgreSQLContainer;
     }
+
     @Override
     public SessionFactory getSessionFactory() {
-       // DbSettings dbSettings = new DbSettings();
+        // DbSettings dbSettings = new DbSettings();
 
         Properties properties = new Properties();
         properties.put(Environment.DRIVER, "org.postgresql.Driver");

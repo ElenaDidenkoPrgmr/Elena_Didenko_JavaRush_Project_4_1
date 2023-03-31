@@ -6,7 +6,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import ua.javarush.eldidenko.hibernate_todo_app.entites.User;
 
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
     private SessionFactory sessionFactory;
 
     public UserRepositoryImpl(SessionFactory sessionFactory) {
@@ -15,13 +15,14 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public User fetchById(Long id) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             return session.get(User.class, id);
         }
     }
+
     @Override
     public User fetchByUserName(String name) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             String hql = "from User u where u.username =: name";
             Query<User> query = session.createQuery(hql, User.class);
             query.setParameter("name", name);
@@ -29,18 +30,20 @@ public class UserRepositoryImpl implements UserRepository{
             return query.uniqueResult();
         }
     }
+
     @Override
     public User save(User user) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.persist(user);
             transaction.commit();
             return user;
         }
     }
+
     @Override
     public User updateUser(User updateUser) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.merge(updateUser);
             transaction.commit();
@@ -50,7 +53,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public void deleteUser(Long id) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             User deleteUser = fetchById(id);
             Transaction transaction = session.beginTransaction();
             session.remove(deleteUser);
