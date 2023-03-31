@@ -5,8 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
+    <changeSet author="christian" id="createSchema">
+        <sql dbms="postgresql" endDelimiter=";">
+            CREATE SCHEMA IF NOT EXISTS todoapp
+        </sql>
+    </changeSet>
+
     <changeSet author="eldidenko" id="1">
-        <createTable tableName="users">
+        <createTable
+                schemaName="todoapp"
+                tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -32,7 +40,9 @@
     </changeSet>
 
     <changeSet author="eldidenko" id="2">
-        <createTable tableName="tasks">
+        <createTable
+                schemaName="todoapp"
+                tableName="tasks">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -52,18 +62,20 @@
     </changeSet>
 
     <changeSet author="eldidenko" id="addForeignKeyConstraint-from-task-to-user">
-        <addForeignKeyConstraint  baseColumnNames="user_id"
-                                  baseTableName="tasks"
-                                  baseTableSchemaName="todoapp"
-                                  constraintName="fk_task_user"
-                                  referencedColumnNames="id"
-                                  referencedTableName="users"
-                                  referencedTableSchemaName="todoapp"
-                                  validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="tasks"
+                                 baseTableSchemaName="todoapp"
+                                 constraintName="fk_task_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"
+                                 referencedTableSchemaName="todoapp"
+                                 validate="true"/>
     </changeSet>
 
     <changeSet author="eldidenko" id="create-table-user-tokens">
-        <createTable tableName="user_tokens">
+        <createTable
+                schemaName="todoapp"
+                tableName="user_tokens">
             <column name="user_id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -75,14 +87,20 @@
     </changeSet>
 
     <changeSet author="eldidenko" id="addForeignKeyConstraint-from-token-to-user">
-        <addForeignKeyConstraint  baseColumnNames="user_id"
-                                  baseTableName="user_tokens"
-                                  baseTableSchemaName="todoapp"
-                                  constraintName="fk_token_user"
-                                  referencedColumnNames="id"
-                                  referencedTableName="users"
-                                  referencedTableSchemaName="todoapp"
-                                  validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_tokens"
+                                 baseTableSchemaName="todoapp"
+                                 constraintName="fk_token_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"
+                                 referencedTableSchemaName="todoapp"
+                                 validate="true"/>
     </changeSet>
+<!--
+    <changeSet author="eldidenko" id="renameSequenceUserId">
+        <renameSequence catalogName="sequences"
+                        newSequenceName="user_seq"
+                        oldSequenceName="user_id_seq"/>
+    </changeSet>-->
 
 </databaseChangeLog>

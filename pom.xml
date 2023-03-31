@@ -33,13 +33,6 @@
             <version>2.0.7</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.github.database-rider/rider-spring -->
-        <dependency>
-            <groupId>com.github.database-rider</groupId>
-            <artifactId>rider-spring</artifactId>
-            <version>1.36.0</version>
-        </dependency>
-
         <dependency>
             <groupId>com.github.database-rider</groupId>
             <artifactId>rider-junit5</artifactId>
@@ -157,6 +150,7 @@
             <artifactId>p6spy</artifactId>
             <version>3.9.1</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -185,6 +179,12 @@
             <groupId>jakarta.interceptor</groupId>
             <artifactId>jakarta.interceptor-api</artifactId>
             <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
+            <version>1.9.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

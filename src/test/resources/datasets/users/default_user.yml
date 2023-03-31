@@ -1,0 +1,4 @@
+todoapp.users:
+  - id: 1
+    username: "Bob"
+    password: "password"
