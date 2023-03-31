@@ -47,6 +47,9 @@ The response will be returned in JSON format and will contain the ID of the crea
 "user_id": 1
 }
 ```
+
+
+
 # Application API
 This page with Application API hosted on SwaggerHub [Swagger API ToDo](https://app.swaggerhub.com/apis-docs/elena.didenko.prgmr/ToDo/1.0.0).
 
