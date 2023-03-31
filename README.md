@@ -61,3 +61,5 @@ This page with Application API hosted on SwaggerHub [Swagger API ToDo](https://a
 - Password hash: A technique for securely storing passwords by hashing them with a one-way function.
 - Swagger: an open-source software framework that helps developers design, build, document, and consume RESTful web services.
 - Log4j2: logging framework for Java applications.
+- Testcontainers: a Java library that supports JUnit tests.
+- Database Rider: testing tool that allows developers to define test data using simple YAML files.
