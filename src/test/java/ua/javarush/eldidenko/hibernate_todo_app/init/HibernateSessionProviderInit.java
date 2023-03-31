@@ -22,7 +22,6 @@ public class HibernateSessionProviderInit implements SessionProvider {
 
     @Override
     public SessionFactory getSessionFactory() {
-        // DbSettings dbSettings = new DbSettings();
 
         Properties properties = new Properties();
         properties.put(Environment.DRIVER, "org.postgresql.Driver");
@@ -33,8 +32,6 @@ public class HibernateSessionProviderInit implements SessionProvider {
         properties.put(Environment.USER, "sa");
         properties.put(Environment.PASS, "sa");
         properties.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
-        //properties.put(Environment.SHOW_SQL, dbSettings.dbProperties().getProperty("hibernate.show_sql"));
-        //properties.put(Environment.HBM2DDL_AUTO, dbSettings.dbProperties().getProperty("hibernate.hbm2ddl.auto"));
 
         return new Configuration()
                 .addAnnotatedClass(User.class)

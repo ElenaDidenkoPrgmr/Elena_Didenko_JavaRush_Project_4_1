@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ua.javarush.eldidenko.hibernate_todo_app.Listener.UserListener;
+import ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,11 +28,11 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @NotNull(message = "username must not be null")
+    @NotNull(message = AppConstants.VALIDATE_USERNAME_NOT_NULL_MESSAGE)
     @Column(unique = true, nullable = false)
     private String username;
 
-    @NotNull(message = "password must not be null")
+    @NotNull(message = AppConstants.VALIDATE_PASSWORD_NOT_NULL_MESSAGE)
     @Column(nullable = false)
     private String password;
 
@@ -44,7 +45,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Email(message = "incorrect email")
+    @Email(message = AppConstants.VALIDATE_EMAIL_MESSAGE)
     @Column(name = "email")
     private String email;
 

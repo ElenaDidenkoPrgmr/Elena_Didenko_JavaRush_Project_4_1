@@ -2,3 +2,16 @@ todoapp.users:
   - id: 1
     username: "Bob"
     password: "password"
+
+  - id: 2
+    username: "Luisa"
+    password: "qwerty"
+    email: "lui@gmail.com"
+
+
+  - id: 3
+    username: "Piter"
+    password: "123456"
+    email: "piter@gmail.com"
+    first_name: "Piter"
+    middle_name: "Pen"

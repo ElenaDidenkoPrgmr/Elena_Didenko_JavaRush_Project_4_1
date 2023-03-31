@@ -32,11 +32,13 @@ public class LiquibaseConfigurationInit {
                 postgreSQLContainer.getContainerIpAddress(),
                 postgreSQLContainer.getMappedPort(PostgreSQLContainer.POSTGRESQL_PORT),
                 postgreSQLContainer.getDatabaseName()));
+
         dsConfig.setUsername(postgreSQLContainer.getUsername());
         dsConfig.setPassword(postgreSQLContainer.getPassword());
         dsConfig.setDriverClassName("org.postgresql.Driver");
         dsConfig.setMaximumPoolSize(5);
         dsConfig.setMinimumIdle(2);
+
         HikariDataSource ds = new HikariDataSource(dsConfig);
         Connection connection = ds.getConnection();
 
@@ -44,7 +46,6 @@ public class LiquibaseConfigurationInit {
         Database db = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);
 
         Liquibase liquiBase = new Liquibase("/liquibase/db.changelog-root.xml", resourceAccessor, db);
-
         liquiBase.update();
     }
 }

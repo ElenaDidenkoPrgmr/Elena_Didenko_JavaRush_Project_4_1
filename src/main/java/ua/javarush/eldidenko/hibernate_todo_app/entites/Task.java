@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ua.javarush.eldidenko.hibernate_todo_app.constants.AppConstants;
 
 import java.sql.Timestamp;
 
@@ -23,7 +24,7 @@ public class Task {
     @Column(name = "id")
     private Long id;
 
-    @NotNull(message = "title must not be null")
+    @NotNull(message = AppConstants.VALIDATE_TASK_TITLE_MESSAGE)
     @Column(name = "title", nullable = false)
     private String title;
 
