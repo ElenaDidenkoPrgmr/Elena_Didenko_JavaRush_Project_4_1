@@ -96,11 +96,4 @@
                                  referencedTableSchemaName="todoapp"
                                  validate="true"/>
     </changeSet>
-<!--
-    <changeSet author="eldidenko" id="renameSequenceUserId">
-        <renameSequence catalogName="sequences"
-                        newSequenceName="user_seq"
-                        oldSequenceName="user_id_seq"/>
-    </changeSet>-->
-
 </databaseChangeLog>

@@ -17,6 +17,7 @@ import ua.javarush.eldidenko.hibernate_todo_app.provider.SessionProvider;
 import java.sql.SQLException;
 import java.util.List;
 
+import static com.github.database.rider.core.api.dataset.SeedStrategy.REFRESH;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DBRider
@@ -46,7 +47,7 @@ public class UserRepositoryImplTest {
     }
 
     @Test
-    @DataSet(value = "datasets/users/default_user.yml", cleanAfter = true)
+    @DataSet(value = "datasets/users/default_users.yml", cleanAfter = true)
     public void should_return_existent_user_by_id() {
         User testUser = User.builder()
                 .id(1L)
@@ -59,13 +60,13 @@ public class UserRepositoryImplTest {
 
 
     @Test
-    @DataSet(value = "datasets/users/default_user.yml", cleanAfter = true)
-    public void should_return_null_non_existent_user_by_id() {
+    @DataSet(value = "datasets/users/default_users.yml", cleanAfter = true)
+    public void should_return_null_if_user_missing_by_id() {
         assertNull(userRepository.fetchById(10L));
     }
 
     @Test
-    @DataSet(value = "datasets/users/default_user.yml", cleanAfter = true)
+    @DataSet(value = "datasets/users/default_users.yml", cleanAfter = true)
     public void should_return_existent_user_by_username() {
         User testUser = User.builder()
                 .id(1L)
@@ -77,15 +78,15 @@ public class UserRepositoryImplTest {
     }
 
     @Test
-    @DataSet(value = "datasets/users/default_user.yml", cleanAfter = true)
-    public void should_return_null_non_existent_user_by_username() {
-        assertEquals(null, userRepository.fetchByUserName("Qwerty"));
+    @DataSet(value = "datasets/users/default_users.yml", cleanAfter = true)
+    public void should_return_null_if_user_missing_by_username() {
+        assertNull(userRepository.fetchByUserName("Qwerty"));
     }
 
     @Test
-    void save() {
+    @DataSet(cleanBefore = true)
+    void should_add_new_user() {
         User newUser = User.builder()
-                //.id(5L)
                 .username("Bob")
                 .password("password")
                 .tasks(List.of())
@@ -98,10 +99,44 @@ public class UserRepositoryImplTest {
     }
 
     @Test
-    void updateUser() {
+    @DataSet(value = "datasets/users/users_with_negative_id.yml", cleanBefore = true, strategy = REFRESH)
+    void should_expected_exception_if_username_is_taken() {
+        User newUser = User.builder()
+                .username("Bob")
+                .password("password")
+                .tasks(List.of())
+                .build();
+        assertNull(newUser.getId());
+        assertThrows(jakarta.persistence.PersistenceException.class, () -> userRepository.save(newUser));
     }
 
     @Test
+    @DataSet(value = "datasets/users/default_users.yml", cleanAfter = true)
+    void updateUser() {
+        User userRequest = User.builder()
+                .id(3L)
+                .username("NewPiter")
+                .password("new_password")
+                .email("new_post_piter@gmail.com")
+                .tasks(List.of())
+                .build();
+
+        User userBeforeUpdate = userRepository.fetchById(3L);
+        User userAfterUpdate = userRepository.updateUser(userRequest);
+
+        assertEquals(userBeforeUpdate.getId(),userAfterUpdate.getId());
+        assertNotEquals(userBeforeUpdate.getUsername(),userAfterUpdate.getUsername());
+        assertNotEquals(userBeforeUpdate.getEmail(),userAfterUpdate.getEmail());
+        assertNotEquals(userBeforeUpdate.getPassword(),userAfterUpdate.getPassword());
+        assertNotEquals(userBeforeUpdate,userAfterUpdate);
+
+    }
+
+    @Test
+    @DataSet(value = "datasets/users/default_users.yml", cleanAfter = true)
     void deleteUser() {
+        assertNotNull(userRepository.fetchById(3L));
+        userRepository.deleteUser(3L);
+        assertNull(userRepository.fetchById(3L));
     }
 }

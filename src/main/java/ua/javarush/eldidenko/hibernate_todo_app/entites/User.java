@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ua.javarush.eldidenko.hibernate_todo_app.Listener.UserListener;
@@ -25,16 +27,16 @@ import java.util.List;
 
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Size(min = 2, max = 25, message = AppConstants.VALIDATE_USERNAME_LENGTH_MESSAGE)
+  //  @Size(min = 2, max = 25, message = AppConstants.VALIDATE_USERNAME_LENGTH_MESSAGE)
     @NotNull(message = AppConstants.VALIDATE_USERNAME_NOT_NULL_MESSAGE)
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Size(min = 8, max = 25, message = AppConstants.VALIDATE_PASSWORD_LENGTH_MESSAGE)
+   // @Size(min = 8, max = 25, message = AppConstants.VALIDATE_PASSWORD_LENGTH_MESSAGE)
     @NotNull(message = AppConstants.VALIDATE_PASSWORD_NOT_NULL_MESSAGE)
     @Column(nullable = false)
     private String password;

@@ -32,6 +32,8 @@ public class HibernateSessionProviderInit implements SessionProvider {
         properties.put(Environment.USER, "sa");
         properties.put(Environment.PASS, "sa");
         properties.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+        properties.put(Environment.SHOW_SQL, true);
+        //properties.put(Environment.HBM2DDL_AUTO, dbSettings.dbProperties().getProperty("hibernate.hbm2ddl.auto"));
 
         return new Configuration()
                 .addAnnotatedClass(User.class)
