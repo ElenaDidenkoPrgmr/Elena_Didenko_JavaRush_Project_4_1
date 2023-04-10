@@ -1,0 +1,17 @@
+cacheConnection: true
+cacheTableNames: true
+leakHunter: false
+caseInsensitiveStrategy: !!com.github.database.rider.core.api.configuration.Orthography 'LOWERCASE'
+properties:
+  batchedStatements:  false
+  qualifiedTableNames: true
+  caseSensitiveTableNames: false
+  batchSize: 100
+  fetchSize: 100
+  allowEmptyFields: false
+  schema: "todoapp"
+connectionConfig:
+  url: "${dbunit.url}"
+  driver: "${dbunit.driver}"
+  user: "${dbunit.user}"
+  password: "${dbunit.password}"

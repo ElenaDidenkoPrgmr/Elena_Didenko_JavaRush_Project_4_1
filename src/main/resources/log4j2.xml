@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Appenders>
+        <RollingFile name="RollingFileServices" fileName="logs/services.log"
+                     filePattern="logs/$${date:yyyy-MM}/services-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <DefaultRolloverStrategy max="20"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RollingFileEntityListener" fileName="logs/EntityListener.log"
+                     filePattern="logs/$${date:yyyy-MM}/EntityListener-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <DefaultRolloverStrategy max="20"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RollingFileResourcesListener" fileName="logs/ResourcesListener.log"
+                     filePattern="logs/$${date:yyyy-MM}/ResourcesListener-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <DefaultRolloverStrategy max="20"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RollingFileAuthentication" fileName="logs/authentication.log"
+                     filePattern="logs/$${date:yyyy-MM}/authentication-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <DefaultRolloverStrategy max="20"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RollingFileOtherLogs" fileName="logs/log.log"
+                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <DefaultRolloverStrategy max="20"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="2 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.Main" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileServices"/>
+        </Logger>
+
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.migration.LiquibaseConfiguration" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileServices"/>
+        </Logger>
+
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.Listener.UserListener" level="debug" additivity="false">
+
+            <AppenderRef ref="RollingFileEntityListener"/>
+        </Logger>
+
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.Listener.ResourcesLoggingFilter" level="debug" additivity="false">
+
+            <AppenderRef ref="RollingFileResourcesListener"/>
+        </Logger>
+
+        <Logger name="ua.javarush.eldidenko.hibernate_todo_app.resources.AuthenticationEndpoint" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileAuthentication"/>
+        </Logger>
+
+        <Root level="warn">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileOtherLogs"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,529 @@
+openapi: 3.0.3
+info:
+  title: Todo App
+  description: |-
+    Todo REST application using Jersey and Postgres database.
+
+  contact:
+    email: elena.didenko.prgmr@gmail.com
+  
+  version: 1.0.0
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/elena.didenko.prgmr/ToDo/1.0.0
+  - url: http://localhost:8080/
+tags:
+  - name: authentication
+    description: Operations about authentication users
+  - name: users
+    description: Operations about user
+  - name: tasks
+    description: Operations about task
+
+paths:
+  /authentication:
+    post:
+      tags:
+        - authentication
+      summary: Add new tokens
+      description: Add a new tokens for user
+      operationId: createTokens
+      requestBody:
+        description: valid username and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tokens'
+        '401':
+          description: Authorization information is missing or invalid.
+    put:
+      tags:
+        - authentication
+      summary: Update tokens
+      description: Update tokens for user
+      operationId: updateTokens
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: valid refresh Token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tokens'
+        '401':
+          description: User unauthorized
+  /authentication/{userId}:
+    get:
+      tags:
+        - authentication
+      summary: valide users access token
+      description: valide access token for user whith userId in path
+      operationId: validateToken
+      parameters:
+        - name: userId
+          in: path
+          description: ID users for validate token
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: token
+          in: query
+          description: users access token for validate
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenValidation'
+        '401':
+          description: Authorization information is missing or invalid.
+  /users:
+    post:
+      tags:
+        - users
+      summary: Add a new user
+      description: Add a new user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '409':
+          description: Username is taken
+  /users/{userId}:
+    get:
+      tags:
+        - users
+      summary: find user by id
+      description: returns info about user
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to return
+          schema:
+            type: integer
+            format: int64
+          required: true
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: User not found
+    put:
+      tags:
+        - users
+      summary: modify user
+      description: modify user by id
+      operationId: updateUser
+      security:
+        - BearerAuth: []
+
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to modify
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: token
+          in: header
+          description: valide acess token
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: valid username and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '401':
+          description: Authorization information is missing or invalid.
+        '409':
+          description: Username is taken
+    delete:
+      tags:
+        - users
+      summary: delete user
+      description: delete user by id
+      operationId: deleteUser
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to delete
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: token
+          in: header
+          description: valide access token
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '204':
+          description: User was deleted successfully.
+        '404':
+          description: User not found
+        '401':
+          description: Authorization information is missing or invalid.
+
+  /users/{userId}/tasks:
+    get:
+      tags:
+        - tasks
+      summary: Find tasks by userId
+      description: A list of users tasks
+      operationId: getAllUsersTask
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: token
+          in: header
+          description: valide access token
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfTaskDTO'
+        '401':
+          description: Authorization information is missing or invalid.
+
+    post:
+      tags:
+        - tasks
+      summary: create task
+      description: create task by userId
+      operationId: createTask
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: token
+          in: header
+          description: valide access token
+          schema:
+            type: string
+          required: true
+
+      requestBody:
+        description: info aboute new task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequest'
+        required: true
+
+
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+        '401':
+          description: Authorization information is missing or invalid.
+
+  /users/{userId}/tasks/{taskId}:
+    get:
+      tags:
+        - tasks
+      summary: Find tasks by userId and taskId
+      description: One users task
+      operationId: getOneTask
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: taskId
+          in: path
+          description: ID of task
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: token
+          in: header
+          description: valide access token
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+        '401':
+          description: Authorization information is missing or invalid.
+
+    put:
+      tags:
+        - tasks
+      summary: Modify task
+      description: Modify task by userId and taskId
+      operationId: updateTask
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: taskId
+          in: path
+          description: ID of task
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: token
+          in: header
+          description: valide access token
+          schema:
+            type: string
+          required: true
+
+      requestBody:
+        description: info aboute new task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequest'
+        required: true
+
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+        '401':
+          description: Authorization information is missing or invalid.
+
+    delete:
+      tags:
+        - tasks
+      summary: Delete tasks
+      description: Delete tasks by userId and taskId
+      operationId: deleteTask
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: taskId
+          in: path
+          description: ID of task
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: token
+          in: header
+          description: valide access token
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Task was deleted successfully.
+        '404':
+          description: Task not found
+        '401':
+          description: Authorization information is missing or invalid.
+
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    RefreshTokenRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImp0aSI6ImNlYzdiZTM4LWFhN2UtNDNiZC1hNjNjLTY5MDU3NjQzY2I2NiIsImlhdCI6MTY3OTE2MjA1MSwiZXhwIjoxNjc5MjQ4NDUxfQ.ztDB8maOfo8gmFFeSoNTxRxUPXVdp7FsuoeNUn1eyfE
+    AuthenticationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: Bob
+        password:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 1
+      xml:
+        name: AuthenticationRequest
+    Tokens:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImp0aSI6ImQ1MmM4MDUxLTM1YTItNDExMi1iZjBkLWE3MTYyMjNjNDVmOSIsImlhdCI6MTY3OTE2MjA1MSwiZXhwIjoxNjc5MTY1NjUxfQ.oG9ZMPFSl9GQXxXMOHXURo7MwQNoh_Vzg4BfakUo8x8
+        refreshToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImp0aSI6ImNlYzdiZTM4LWFhN2UtNDNiZC1hNjNjLTY5MDU3NjQzY2I2NiIsImlhdCI6MTY3OTE2MjA1MSwiZXhwIjoxNjc5MjQ4NDUxfQ.ztDB8maOfo8gmFFeSoNTxRxUPXVdp7FsuoeNUn1eyfE
+      xml:
+        name: Tokens
+    TokenValidation:
+      type: object
+      properties:
+        isValid:
+          type: boolean
+      xml:
+        name: TokenValidation
+    UserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: Bob
+        password:
+          type: string
+          example: myPassword2e2edde3
+      xml:
+        name: UserRequest
+
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+          example: VerhovniyMemolog
+        firstName:
+          type: string
+          example: Peter
+        middleName:
+          type: string
+          example: Jone
+        lastName:
+          type: string
+          example: White
+        email:
+          type: string
+          example: peter@gmail.com
+
+    TaskDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+          example: first task
+        description:
+          type: string
+          example: Learn java
+
+    ArrayOfTaskDTO:
+      type: array
+      items:
+        type: object
+
+    TaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: first task
+        description:
+          type: string
+          example: Learn java
